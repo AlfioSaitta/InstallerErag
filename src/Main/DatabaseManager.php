@@ -22,23 +22,24 @@ class DatabaseManager
     /**
      * Run the migration and call the seeder.
      */
-    private function migrate(BufferedOutput $outputLog): array
+    public function migrate(BufferedOutput $outputLog): array
     {
         try {
             Artisan::call('migrate:fresh', [
                 '--force' => true, // You can use --force to avoid prompts if needed
-            ]);
+            ], $outputLog);
+            return ['success', $outputLog];
         } catch (Exception $e) {
             return ['error', $outputLog];
         }
 
-        return $this->seed($outputLog);
+        // return $this->seed($outputLog);
     }
 
     /**
      * Seed the database.
      */
-    private function seed(BufferedOutput $outputLog): array
+    public function seed(BufferedOutput $outputLog): array
     {
         try {
             Artisan::call('db:seed', ['--force' => true], $outputLog);
